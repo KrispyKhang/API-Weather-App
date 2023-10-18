@@ -3,9 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./Develop/style.css">
     <title>Weather App Project</title>
 </head>
+
 <body>
+
     <h1>Weather Dashboard</h1>
     <div class="container">
         <div class="weather-input">
@@ -13,10 +19,28 @@
             <input type="text" placeholder="ie: Tokyo, San Francisco, New York">
             <button class="search-btn">Search</button>
             <div class="seperator"></div>
-                <button class="location btn">Use Current Location</button>
+                <button class="location-btn">Use Current Location</button>
         </div>
     </div>
 
+    <div class="weather-data">
+        <div class="current-weather">
+            <div class="details">
+                <h2>Tokyo 10/17/2023</h2>
+                <h4>Temperature: 50°F</h4>
+                <h4>Wind: 13 MPH</h4>
+                <h4>Humidity: 60%</h4>
+            </div>
+
+            <div class="icon">
+                <img src="https://openweathermap.org/img/wn/10n@2x.png" alt="weather-icon">
+                <h4>Moderate Rain</h4>
+
+            </div>
+        </div>
+    </div>
+
+    
 
 </body>
 </html>
