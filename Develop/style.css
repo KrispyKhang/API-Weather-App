@@ -1,6 +1,6 @@
 :root {
     --sky: #d2dbf8;
-    --grey: #151cae;  
+    --cobalt: #151cae;  
 }
 
 * {
@@ -16,11 +16,11 @@ body {
 }
 
 h1 {
-    background-color: var(--grey);
+    background: linear-gradient(to bottom, #000, #151cae);
     color: white;
     text-align: center;
     font-size: 2rem;
-    padding: 18px 0;
+    padding: 15px 0;
 }
 
 .container {
@@ -30,7 +30,46 @@ h1 {
     padding: 30px;
 }
 
+.weather-input{
+    width: 550px;;
+}
+
 .weather-input input {
     width: 100%;
     height: 50px;
+    /* border: 2px solid red; */
+    outline: none;
+    padding: 0 18px;
+    margin: 10px 0 20px 0;
+    font-size: 1.07rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.weather-input .seperator {
+    height: 1px;
+    width: 100%;
+    background: #bbb;
+
+}
+
+.weather-input button {
+    width: 100%;
+    padding: 10px 0;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+    background: linear-gradient(to bottom, #000, #151cae);
+
+}
+
+.weather-input .location-btn {
+    background: #6c757d;
+}
+
+.weather-data {
+    width: 100%;
 }
