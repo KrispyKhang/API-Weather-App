@@ -1,12 +1,26 @@
 const searchBtn = document.querySelector('.search-btn');
+const locationBtn = document.querySelector('.location-btn');
 const weatherCardsDiv = document.querySelector('.weather-cards');
+const currentWeatherDiv = document.querySelector('.current-weather');
 const cityInput = document.querySelector('.city-input');
 
 
 // API Key for OpenWeatherMap
 const API_KEY = "4ffa9db12ba1b0f6a2b585b0eeb1cb2f"
 
-const createWeatherCard = (weatherItem) => {
+const createWeatherCard = (cityName, weatherItem, index) => {
+    if(index === 0) { // HTML for the main weather card
+    return `<div class="details">
+                <h2>${cityName}(${weatherItem.dt_txt.split(" ")[0]})</h2>
+                <h4>Temperature: ${(weatherItem.main.temp - 273.15).toFixed(2)} °C</h4>
+                <h4>Wind: ${weatherItem.wind.speed} M/S</h4>
+                <h4>Humidity: ${weatherItem.main.humidity}%</h4>
+            </div>
+            <div class="icon">
+                <img src="https://openweathermap.org/img/wn/${weatherItem.weather[0].icon}@4x.png" alt="weather-icon">
+                <h4>${weatherItem.weather[0].description}</h4>
+            </div>`;
+    } else { // HTML for the other five day forecast card
     return `<li class="card">
                 <h3>(${weatherItem.dt_txt.split(" ")[0]})</h3>
                 <img src="https://openweathermap.org/img/wn/${weatherItem.weather[0].icon}@2x.png" alt="weather-icon">
@@ -14,7 +28,7 @@ const createWeatherCard = (weatherItem) => {
                 <h4>Wind: ${weatherItem.wind.speed} M/S</h4>
                 <h4>Humidity: ${weatherItem.main.humidity}%</h4>
             </li>`;
- 
+        }
 }
 
 const getWeatherDetails = (cityName, lat, lon) => {
@@ -31,9 +45,19 @@ const getWeatherDetails = (cityName, lat, lon) => {
                 }
             });
 
-            console.log(fiveDaysForecast);
-            fiveDaysForecast.forEach(weatherItem => {
-                weatherCardsDiv.insertAdjacentHTML("beforeend", createWeatherCard(weatherItem));
+
+            // Clearing previous weather data  
+            cityInput.value = "";
+            currentWeatherDiv.innerHTML = "";
+            weatherCardsDiv.innerHTML = "";
+
+            // Creating weather cards and adding them to the DOM 
+            fiveDaysForecast.forEach((weatherItem, index) => {
+                if(index === 0) {
+                currentWeatherDiv.insertAdjacentHTML("beforeend", createWeatherCard(cityName, weatherItem, index));
+                } else {
+                weatherCardsDiv.insertAdjacentHTML("beforeend", createWeatherCard(cityName, weatherItem, index));
+                }
             });
 
         }).catch(() => {
@@ -54,17 +78,11 @@ const getCityCoordinates = () => {
 
 
     // Get entered city coordinates (latitude, longitude, and name) from the API response
-    fetch(GEOCODING_API_URL)
-    // Below is a promise chain
-    .then(res => res.json()) //parse the response as JSON
-    .then(data => {
+    fetch(GEOCODING_API_URL).then(res => res.json()).then(data => {
         // Once response is received, parse it as JSON and return the parsed data as a resolved promise
         if(!data.length) return alert (`no coordaintes found for ${cityName}`);
         const { name, lat, lon } = data[0];
-        getWeatherDetails( name, lat, lon ); 
-
-        
-
+        getWeatherDetails(name, lat, lon); 
         // Catch method to catch and handle errors that may occur in the Promise chain.
     }).catch(() => {
         // Handle errors by displaying an alert message
@@ -73,4 +91,29 @@ const getCityCoordinates = () => {
 
 }
 
-searchBtn.addEventListener('click', getCityCoordinates);
+const getUserCoordinates = () => {
+    navigator.geolocation.getCurrentPosition(
+        position => {
+            const { latitude, longitude } = position.coords; 
+            const REVERSE_GEOCODING_URL = `https://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=${API_KEY}`;
+            
+            //  Get city name from coordiates using reverse geocoding API
+            fetch(REVERSE_GEOCODING_URL).then(res => res.json()).then(data => {
+                const { name, lat, lon } = data[0];
+                getWeatherDetails( name, latitude, longitude ); 
+            }).catch(() => {
+                alert("An error occured while fetching the city!");
+            });
+        },
+        error => {
+            if (error.code === error.PERMISSION_DENIED) {
+
+            }
+
+        }
+    );
+}
+
+
+locationBtn.addEventListener("click", getUserCoordinates);
+searchBtn.addEventListener("click", getCityCoordinates);
