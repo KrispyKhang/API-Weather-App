@@ -145,6 +145,20 @@ h1 {
     margin: 5px 0 -12px 0;
 }
 
+
+.search-btn, .location-btn {
+  transition: all 0.3s;
+}
+
+.search-btn:hover, .location-btn:hover {
+  transform: scale(1.0177);
+}
+
+.search-btn:active, .location-btn:active {
+  transform: scale(0.98);
+}
+
+
 @media (max-width: 1400px) {
     .weather-data .current-weather {
       padding: 20px;

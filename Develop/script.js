@@ -13,7 +13,6 @@ function metersPerSecondToMilesPerHour(mps) {
 }
 
 const createWeatherCard = (cityName, weatherItem, index, unit = "C") => {
-
     // Convert wind speed from M/S to MPH
     const windSpeed = unit === "F" ? metersPerSecondToMilesPerHour(weatherItem.wind.speed) : weatherItem.wind.speed;
 
@@ -27,7 +26,7 @@ const createWeatherCard = (cityName, weatherItem, index, unit = "C") => {
 
     if(index === 0) { // HTML for the main weather card
     return `<div class="details">
-                <h2>${cityName} (${weatherItem.dt_txt.split(" ")[0]})</h2>
+                <h2>${cityName}  (${weatherItem.dt_txt.split(" ")[0]})</h2>
                 <h4>Temperature: ${temperature}</h4>
                 <h4>Wind: ${windSpeed} ${unit === "F" ? "MPH" : "M/S"}</h4>
                 <h4>Humidity: ${weatherItem.main.humidity}%</h4>
