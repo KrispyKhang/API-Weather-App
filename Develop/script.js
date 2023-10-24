@@ -8,12 +8,28 @@ const cityInput = document.querySelector('.city-input');
 // API Key for OpenWeatherMap
 const API_KEY = "4ffa9db12ba1b0f6a2b585b0eeb1cb2f"
 
-const createWeatherCard = (cityName, weatherItem, index) => {
+function metersPerSecondToMilesPerHour(mps) {
+    return (mps * 2.23694).toFixed(2);
+}
+
+const createWeatherCard = (cityName, weatherItem, index, unit = "C") => {
+
+    // Convert wind speed from M/S to MPH
+    const windSpeed = unit === "F" ? metersPerSecondToMilesPerHour(weatherItem.wind.speed) : weatherItem.wind.speed;
+
+    // Converts Celsius API into Farenheit
+    let temperature;
+    if (unit === "C") {
+        temperature = (weatherItem.main.temp - 273.15).toFixed(2) + " °C";
+    } else if (unit === "F") {
+        temperature = (((weatherItem.main.temp - 273.15) * 9/5) + 32).toFixed(2) + " °F";
+    }
+
     if(index === 0) { // HTML for the main weather card
     return `<div class="details">
                 <h2>${cityName} (${weatherItem.dt_txt.split(" ")[0]})</h2>
-                <h4>Temperature: ${(weatherItem.main.temp - 273.15).toFixed(2)} °C</h4>
-                <h4>Wind: ${weatherItem.wind.speed} M/S</h4>
+                <h4>Temperature: ${temperature}</h4>
+                <h4>Wind: ${windSpeed} ${unit === "F" ? "MPH" : "M/S"}</h4>
                 <h4>Humidity: ${weatherItem.main.humidity}%</h4>
             </div>
             <div class="icon">
@@ -24,8 +40,8 @@ const createWeatherCard = (cityName, weatherItem, index) => {
     return `<li class="card">
                 <h3>(${weatherItem.dt_txt.split(" ")[0]})</h3>
                 <img src="https://openweathermap.org/img/wn/${weatherItem.weather[0].icon}@2x.png" alt="weather-icon">
-                <h4>Temp: ${(weatherItem.main.temp - 273.15).toFixed(2)} °C</h4>
-                <h4>Wind: ${weatherItem.wind.speed} M/S</h4>
+                <h4>Temp: ${temperature}</h4>
+                <h4>Wind: ${windSpeed} ${unit === "F" ? "MPH" : "M/S"}</h4>
                 <h4>Humidity: ${weatherItem.main.humidity}%</h4>
             </li>`;
         }
@@ -54,9 +70,9 @@ const getWeatherDetails = (cityName, lat, lon) => {
             // Creating weather cards and adding them to the DOM 
             fiveDaysForecast.forEach((weatherItem, index) => {
                 if(index === 0) {
-                currentWeatherDiv.insertAdjacentHTML("beforeend", createWeatherCard(cityName, weatherItem, index));
+                currentWeatherDiv.insertAdjacentHTML("beforeend", createWeatherCard(cityName, weatherItem, index, "F"));
                 } else {
-                weatherCardsDiv.insertAdjacentHTML("beforeend", createWeatherCard(cityName, weatherItem, index));
+                weatherCardsDiv.insertAdjacentHTML("beforeend", createWeatherCard(cityName, weatherItem, index, "F"));
                 }
             });
 
