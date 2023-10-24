@@ -11,7 +11,7 @@ const API_KEY = "4ffa9db12ba1b0f6a2b585b0eeb1cb2f"
 const createWeatherCard = (cityName, weatherItem, index) => {
     if(index === 0) { // HTML for the main weather card
     return `<div class="details">
-                <h2>${cityName}(${weatherItem.dt_txt.split(" ")[0]})</h2>
+                <h2>${cityName} (${weatherItem.dt_txt.split(" ")[0]})</h2>
                 <h4>Temperature: ${(weatherItem.main.temp - 273.15).toFixed(2)} °C</h4>
                 <h4>Wind: ${weatherItem.wind.speed} M/S</h4>
                 <h4>Humidity: ${weatherItem.main.humidity}%</h4>
@@ -71,16 +71,19 @@ const getCityCoordinates = () => {
     // removes the extra spacing when user inputs the city name
     const cityName = cityInput.value.trim(); 
     // return if cityName is empty
-    if(!cityName) return;
+    if(!cityName) {
+        alert("Please enter a valid city name.")
+    return;
+    }
+
+
     const GEOCODING_API_URL = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${API_KEY}`;
     
-
-
 
     // Get entered city coordinates (latitude, longitude, and name) from the API response
     fetch(GEOCODING_API_URL).then(res => res.json()).then(data => {
         // Once response is received, parse it as JSON and return the parsed data as a resolved promise
-        if(!data.length) return alert (`no coordaintes found for ${cityName}`);
+        if(!data.length) return alert (`no coordinates found for ${cityName}`);
         const { name, lat, lon } = data[0];
         getWeatherDetails(name, lat, lon); 
         // Catch method to catch and handle errors that may occur in the Promise chain.
@@ -117,3 +120,6 @@ const getUserCoordinates = () => {
 
 locationBtn.addEventListener("click", getUserCoordinates);
 searchBtn.addEventListener("click", getCityCoordinates);
+// When user types the city name in the input
+// they can press enter on they keyboard and it will trigger the search without having to press the search button
+cityInput.addEventListener("keyup", e => e.key === "Enter" && getCityCoordinates());
