@@ -3,6 +3,7 @@ const locationBtn = document.querySelector('.location-btn');
 const weatherCardsDiv = document.querySelector('.weather-cards');
 const currentWeatherDiv = document.querySelector('.current-weather');
 const cityInput = document.querySelector('.city-input');
+const historyDiv = document.querySelector('#weatherHistory');
 
 
 // API Key for OpenWeatherMap
@@ -133,6 +134,18 @@ const getUserCoordinates = () => {
         }
     );
 }
+
+function populateSearchHistory() {
+    const readHistory = JSON.parse(localStorage.getItem("weatherHistory"));
+    for (let i = 0; i < readHistory.length; i++) {
+        const button = document.createElement("button")
+        button.textContent = readHistory[i];
+        // come back to add comment and event listener
+        historyDiv.append(button);
+    }
+}
+populateSearchHistory(); 
+
 
 function addSearchHistory(name) {
     const browserHistory = JSON.parse(localStorage.getItem("weatherHistory"));

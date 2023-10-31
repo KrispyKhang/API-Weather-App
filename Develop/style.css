@@ -76,6 +76,13 @@ h1 {
     background: linear-gradient(to bottom, #000, #151cae);
 }
 
+#weatherHistory {
+  display: flex;
+  flex-direction: column; 
+  gap: 20px;
+
+}
+
 .weather-input .location-btn {
     background: #6c757d;
 }
