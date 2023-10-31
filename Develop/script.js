@@ -21,11 +21,11 @@ const createWeatherCard = (cityName, weatherItem, index, unit = "C") => {
     if (unit === "C") {
         temperature = (weatherItem.main.temp - 273.15).toFixed(2) + " °C";
     } else if (unit === "F") {
-        temperature = (((weatherItem.main.temp - 273.15) * 9/5) + 32).toFixed(2) + " °F";
+        temperature = (((weatherItem.main.temp - 273.15) * 9 / 5) + 32).toFixed(2) + " °F";
     }
 
-    if(index === 0) { // HTML for the main weather card
-    return `<div class="details">
+    if (index === 0) { // HTML for the main weather card
+        return `<div class="details">
                 <h2>${cityName}  (${weatherItem.dt_txt.split(" ")[0]})</h2>
                 <h4>Temperature: ${temperature}</h4>
                 <h4>Wind: ${windSpeed} ${unit === "F" ? "MPH" : "M/S"}</h4>
@@ -36,14 +36,14 @@ const createWeatherCard = (cityName, weatherItem, index, unit = "C") => {
                 <h4>${weatherItem.weather[0].description}</h4>
             </div>`;
     } else { // HTML for the other five day forecast card
-    return `<li class="card">
+        return `<li class="card">
                 <h3>(${weatherItem.dt_txt.split(" ")[0]})</h3>
                 <img src="https://openweathermap.org/img/wn/${weatherItem.weather[0].icon}@2x.png" alt="weather-icon">
                 <h4>Temp: ${temperature}</h4>
                 <h4>Wind: ${windSpeed} ${unit === "F" ? "MPH" : "M/S"}</h4>
                 <h4>Humidity: ${weatherItem.main.humidity}%</h4>
             </li>`;
-        }
+    }
 }
 
 const getWeatherDetails = (cityName, lat, lon) => {
@@ -55,7 +55,7 @@ const getWeatherDetails = (cityName, lat, lon) => {
             const uniqueForecastDays = [];
             const fiveDaysForecast = data.list.filter(forecast => {
                 const forecastDate = new Date(forecast.dt_txt).getDate();
-                if(!uniqueForecastDays.includes(forecastDate)) {
+                if (!uniqueForecastDays.includes(forecastDate)) {
                     return uniqueForecastDays.push(forecastDate);
                 }
             });
@@ -68,10 +68,10 @@ const getWeatherDetails = (cityName, lat, lon) => {
 
             // Creating weather cards and adding them to the DOM 
             fiveDaysForecast.forEach((weatherItem, index) => {
-                if(index === 0) {
-                currentWeatherDiv.insertAdjacentHTML("beforeend", createWeatherCard(cityName, weatherItem, index, "F"));
+                if (index === 0) {
+                    currentWeatherDiv.insertAdjacentHTML("beforeend", createWeatherCard(cityName, weatherItem, index, "F"));
                 } else {
-                weatherCardsDiv.insertAdjacentHTML("beforeend", createWeatherCard(cityName, weatherItem, index, "F"));
+                    weatherCardsDiv.insertAdjacentHTML("beforeend", createWeatherCard(cityName, weatherItem, index, "F"));
                 }
             });
 
@@ -84,23 +84,23 @@ const getWeatherDetails = (cityName, lat, lon) => {
 
 const getCityCoordinates = () => {
     // removes the extra spacing when user inputs the city name
-    const cityName = cityInput.value.trim(); 
+    const cityName = cityInput.value.trim();
     // return if cityName is empty
-    if(!cityName) {
+    if (!cityName) {
         alert("Please enter a valid city name.")
-    return;
+        return;
     }
 
 
     const GEOCODING_API_URL = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${API_KEY}`;
-    
+
 
     // Get entered city coordinates (latitude, longitude, and name) from the API response
     fetch(GEOCODING_API_URL).then(res => res.json()).then(data => {
         // Once response is received, parse it as JSON and return the parsed data as a resolved promise
-        if(!data.length) return alert (`no coordinates found for ${cityName}`);
+        if (!data.length) return alert(`no coordinates found for ${cityName}`);
         const { name, lat, lon } = data[0];
-        getWeatherDetails(name, lat, lon); 
+        getWeatherDetails(name, lat, lon);
         addSearchHistory(name);
         // Catch method to catch and handle errors that may occur in the Promise chain.
     }).catch(() => {
@@ -113,13 +113,13 @@ const getCityCoordinates = () => {
 const getUserCoordinates = () => {
     navigator.geolocation.getCurrentPosition(
         position => {
-            const { latitude, longitude } = position.coords; 
+            const { latitude, longitude } = position.coords;
             const REVERSE_GEOCODING_URL = `https://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=${API_KEY}`;
-            
+
             //  Get city name from coordiates using reverse geocoding API
             fetch(REVERSE_GEOCODING_URL).then(res => res.json()).then(data => {
                 const { name, lat, lon } = data[0];
-                getWeatherDetails( name, latitude, longitude ); 
+                getWeatherDetails(name, latitude, longitude);
                 addSearchHistory(name);
             }).catch(() => {
                 alert("An error occured while fetching the city!");
@@ -135,11 +135,12 @@ const getUserCoordinates = () => {
 }
 
 function addSearchHistory(name) {
-const browserHistory = JSON.parse(localStorage.getItem("weatherHistory"));
+    const browserHistory = JSON.parse(localStorage.getItem("weatherHistory"));
 
-if (!browserHistory || browserHistory.length === 0) {
-localStorage.setItem("weatherHistory", JSON.stringify([name]));
+    if (!browserHistory || browserHistory.length === 0) {
+        localStorage.setItem("weatherHistory", JSON.stringify([name]));
     } else {
+        if (browserHistory.includes(name)) browserHistory.splice(browserHistory.indexOf(name), 1);
         browserHistory.push(name);
         localStorage.setItem("weatherHistory", JSON.stringify(browserHistory));
     }
