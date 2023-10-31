@@ -101,6 +101,7 @@ const getCityCoordinates = () => {
         if(!data.length) return alert (`no coordinates found for ${cityName}`);
         const { name, lat, lon } = data[0];
         getWeatherDetails(name, lat, lon); 
+        addSearchHistory(name);
         // Catch method to catch and handle errors that may occur in the Promise chain.
     }).catch(() => {
         // Handle errors by displaying an alert message
@@ -119,6 +120,7 @@ const getUserCoordinates = () => {
             fetch(REVERSE_GEOCODING_URL).then(res => res.json()).then(data => {
                 const { name, lat, lon } = data[0];
                 getWeatherDetails( name, latitude, longitude ); 
+                addSearchHistory(name);
             }).catch(() => {
                 alert("An error occured while fetching the city!");
             });
@@ -132,6 +134,16 @@ const getUserCoordinates = () => {
     );
 }
 
+function addSearchHistory(name) {
+const browserHistory = JSON.parse(localStorage.getItem("weatherHistory"));
+
+if (!browserHistory || browserHistory.length === 0) {
+localStorage.setItem("weatherHistory", JSON.stringify([name]));
+    } else {
+        browserHistory.push(name);
+        localStorage.setItem("weatherHistory", JSON.stringify(browserHistory));
+    }
+}
 
 locationBtn.addEventListener("click", getUserCoordinates);
 searchBtn.addEventListener("click", getCityCoordinates);
