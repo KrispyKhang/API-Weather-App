@@ -4,7 +4,12 @@ const weatherCardsDiv = document.querySelector('.weather-cards');
 const currentWeatherDiv = document.querySelector('.current-weather');
 const cityInput = document.querySelector('.city-input');
 const historyDiv = document.querySelector('#weatherHistory');
+const clearBtn = document.querySelector("#clear-history")
 
+clearBtn.addEventListener("click", ()=>{
+    localStorage.setItem("weatherHistory", JSON.stringify([]))
+    populateSearchHistory()
+})
 
 // API Key for OpenWeatherMap
 const API_KEY = "4ffa9db12ba1b0f6a2b585b0eeb1cb2f"
@@ -83,9 +88,8 @@ const getWeatherDetails = (cityName, lat, lon) => {
 
 }
 
-const getCityCoordinates = () => {
+const getCityCoordinates = (cityName) => {
     // removes the extra spacing when user inputs the city name
-    const cityName = cityInput.value.trim();
     // return if cityName is empty
     if (!cityName) {
         alert("Please enter a valid city name.")
@@ -137,14 +141,21 @@ const getUserCoordinates = () => {
 
 function populateSearchHistory() {
     const readHistory = JSON.parse(localStorage.getItem("weatherHistory"));
-    for (let i = 0; i < readHistory.length; i++) {
+    historyDiv.innerHTML = "";
+    for (let i = readHistory.length - 1; i >= 0; i--) {
         const button = document.createElement("button")
         button.textContent = readHistory[i];
-        // come back to add comment and event listener
+        button.addEventListener("click", () => {
+            getCityCoordinates(readHistory[i])
+        });        
+        button.classList.add("search-btn");
         historyDiv.append(button);
+    
     }
+    if (readHistory.length === 0 ) clearBtn.classList.add("hidden")
+    else clearBtn.classList.remove("hidden")
 }
-populateSearchHistory(); 
+populateSearchHistory();
 
 
 function addSearchHistory(name) {
@@ -157,10 +168,18 @@ function addSearchHistory(name) {
         browserHistory.push(name);
         localStorage.setItem("weatherHistory", JSON.stringify(browserHistory));
     }
+
+    populateSearchHistory();
+
 }
 
 locationBtn.addEventListener("click", getUserCoordinates);
-searchBtn.addEventListener("click", getCityCoordinates);
+searchBtn.addEventListener("click", () => {
+    getCityCoordinates(cityInput.value.trim())
+});
 // When user types the city name in the input
 // they can press enter on they keyboard and it will trigger the search without having to press the search button
-cityInput.addEventListener("keyup", e => e.key === "Enter" && getCityCoordinates());
+cityInput.addEventListener("keyup", e => {
+    e.key === "Enter" && getCityCoordinates(cityInput.value.trim())
+}
+);
