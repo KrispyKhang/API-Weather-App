@@ -140,7 +140,7 @@ const getUserCoordinates = () => {
 }
 
 function populateSearchHistory() {
-    const readHistory = JSON.parse(localStorage.getItem("weatherHistory"));
+    const readHistory = JSON.parse(localStorage.getItem("weatherHistory")) || [];
     historyDiv.innerHTML = "";
     for (let i = readHistory.length - 1; i >= 0; i--) {
         const button = document.createElement("button")
@@ -159,7 +159,7 @@ populateSearchHistory();
 
 
 function addSearchHistory(name) {
-    const browserHistory = JSON.parse(localStorage.getItem("weatherHistory"));
+    const browserHistory = JSON.parse(localStorage.getItem("weatherHistory")) || [];
 
     if (!browserHistory || browserHistory.length === 0) {
         localStorage.setItem("weatherHistory", JSON.stringify([name]));
