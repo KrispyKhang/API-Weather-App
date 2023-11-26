@@ -38,7 +38,7 @@ THEN I am again presented with current and future conditions for that city
 * Made conversions for API that uses MPS (Meters per second) instead of MPH and conversion from celsius to farenheight.
 * See screenshots below for the finished product.
 
-![](./Assets/Walkthrough.gif)
+![](./Assets/Images)
 
 ## Features
  * When types in a city with our OPEN Weather API. They are presented with the temperature(F), the wind speed (MPH), and the humidity %

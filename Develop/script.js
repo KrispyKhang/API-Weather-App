@@ -50,7 +50,7 @@ const createWeatherCard = (cityName, weatherItem, index, unit = "C") => {
                 <h4>Humidity: ${weatherItem.main.humidity}%</h4>
             </li>`;
     }
-}
+} 
 
 const getWeatherDetails = (cityName, lat, lon) => {
     const WEATHER_API_URL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}`;
