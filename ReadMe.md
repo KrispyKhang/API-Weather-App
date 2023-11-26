@@ -31,27 +31,30 @@ THEN I am again presented with current and future conditions for that city
 ```
 
 ## Summary
-* HTML, CSS, & Javascript were used to create this Password Generator Site.
-* This module 3 assignment emphasizes the use case of Javascript on making a webpage have purpose and function.
+* HTML, CSS, & Javascript were used to create the Server weather app.
+* This module 6 assignment uses a server API created on the internet that is accessible for builders.
+* Generated an API key to use for the Open Weather API
+* Used 4 api urls to obtain data to build. ie: city, longitude, latitude/
+* Made conversions for API that uses MPS (Meters per second) instead of MPH and conversion from celsius to farenheight.
 * See screenshots below for the finished product.
 
+![](./Assets/Walkthrough.gif)
+
 ## Features
- * A Generate button:
-    * Once clicked, it will pop up a series of prompts.
-    * A random password will be generated after the user data is collected using Javascript.
+ * When types in a city with our OPEN Weather API. They are presented with the temperature(F), the wind speed (MPH), and the humidity %
+ * User can also search the city based on their current location.
+ * As User searches the city, it is saved on the localStorage. 
+ * The search history is presented below the current location button where user can view all the past search histories. 
+ * User can also see the clear history button below the past searched histories.
+ * If the user types in an incorrect city, there is an alert pop up that says "no coordinates found for (city input)"
+* User also has the ability to press enter on their keyboard and it would enter the value without them having to click on the button. 
+ 
+ 
+ 
 
-![](./Assets/Images/2.png)
 
- * Prompt pop up:
-    * A series of prompts will pop up asking users the number of characters in their passwords
-    that they want ranged from 8 to 128 characters.
-    * Then followed by prompts to see if users want special characters, lowercase, uppercase, and/ or numbers in the password.
 
-![](./Assets/Images/3.png)
 
- * Ta-da! Password is generated based on user preference.
-
-![](./Assets/Images/1.png)
 
 
 
